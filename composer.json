@@ -3,7 +3,8 @@
     "description": "GDPR compliant data portability",
     "type": "library",
     "require": {
-        "php": ">=7.0.0"
+        "php": ">=7.0.0",
+        "illuminate/support": "~5.5"
     },
     "license": "MIT",
     "authors": [
@@ -12,5 +13,12 @@
             "email": "sander@tutanota.de"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Soved\\Laravel\\Gdpr\\GdprServiceProvider"
+            ]
+        }
+    }
 }
