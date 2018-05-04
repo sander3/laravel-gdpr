@@ -1,0 +1,16 @@
+{
+    "name": "soved/laravel-gdpr",
+    "description": "GDPR compliant data portability",
+    "type": "library",
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sander de Vos",
+            "email": "sander@tutanota.de"
+        }
+    ],
+    "minimum-stability": "stable"
+}
