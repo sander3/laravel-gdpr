@@ -6,6 +6,11 @@
         "php": ">=7.0.0",
         "illuminate/support": "~5.5"
     },
+    "autoload": {
+        "psr-4": {
+            "Soved\\Laravel\\Gdpr\\": "src/"
+        }
+    },
     "license": "MIT",
     "authors": [
         {
