@@ -5,7 +5,7 @@ namespace Soved\Laravel\Gdpr;
 trait Portable
 {
     /**
-     * Convert the model instance to an GDPR compliant data portability array.
+     * Convert the model instance to a GDPR compliant data portability array.
      *
      * @return array
      */
