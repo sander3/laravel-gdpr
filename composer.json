@@ -1,9 +1,16 @@
 {
     "name": "soved/laravel-gdpr",
     "description": "GDPR compliant data portability",
+    "keywords": ["laravel", "gdpr", "article 20", "data portability", "soved"],
     "type": "library",
     "require": {
-        "php": ">=7.0.0"
+        "php": ">=7.0.0",
+        "laravel/framework": "~5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Soved\\Laravel\\Gdpr\\": "src/"
+        }
     },
     "license": "MIT",
     "authors": [
@@ -12,5 +19,12 @@
             "email": "sander@tutanota.de"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Soved\\Laravel\\Gdpr\\GdprServiceProvider"
+            ]
+        }
+    }
 }
