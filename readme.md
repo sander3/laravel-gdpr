@@ -1,6 +1,6 @@
 # GDPR compliant data portability with ease
 
-This package helps you to be compliant with the GDPR article 20.
+This package helps you to be compliant with the GDPR (article 20).
 
 ## Requirements
 
@@ -57,7 +57,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Portable, Notifiable;
-    
+
     /**
      * Get the GDPR compliant data portability array for the model.
      *
@@ -66,9 +66,9 @@ class User extends Authenticatable
     public function toPortableArray()
     {
         $array = $this->toArray();
-        
+
         // Customize array...
-        
+
         return $array;
     }
 }
@@ -91,7 +91,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Portable, Notifiable;
-    
+
     /**
      * The relations to include in the downloadable data.
      *
@@ -118,7 +118,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Portable, Notifiable;
-    
+
     /**
      * The attributes that should be hidden for the downloadable data.
      *
@@ -143,7 +143,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Portable, Notifiable;
-    
+
     /**
      * The attributes that should be visible in the downloadable data.
      *
@@ -157,6 +157,36 @@ class User extends Authenticatable
 ## Usage
 
 This package exposes an endpoint at `/gdpr/download`. Only authenticated users should be able to access the routes. Your application should make a POST call, containing the currently authenticated user's password, to this endpoint. The re-authentication is needed to prevent information leakage.
+
+### Encryption
+
+> Before using encryption, you must set a `key` option in your `config/app.php` configuration file. If this value is not properly set, all encrypted values will be insecure.
+
+You may encrypt/decrypt attributes on the fly using the `Soved\Laravel\Gdpr\EncryptsAttributes` trait on any model. The trait expects the `$encrypted` property to be filled with attribute keys:
+
+```php
+<?php
+
+namespace App;
+
+use Soved\Laravel\Gdpr\Portable;
+use Illuminate\Notifications\Notifiable;
+use Soved\Laravel\Gdpr\EncryptsAttributes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use EncryptsAttributes, Portable, Notifiable;
+
+    /**
+     * The attributes that should be encrypted and decrypted on the fly.
+     *
+     * @var array
+     */
+    protected $encrypted = ['ssnumber'];
+}
+
+```
 
 ## Security Vulnerabilities
 
