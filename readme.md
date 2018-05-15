@@ -265,6 +265,10 @@ class SomeController extends Controller
 
 If you discover a security vulnerability within this project, please send an e-mail to Dialect via [katrineholm@dialect.se](mailto:katrineholm@dialect.se). All security vulnerabilities will be promptly addressed.
 
+##Credit
+
+[sander3](https://github.com/sander3): Author of the original package used as a startingpoint
+
 ## License
 
 This package is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
