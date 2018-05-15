@@ -12,7 +12,7 @@ This package helps you to be compliant with the GDPR (article 20).
 First, install the package via the Composer package manager:
 
 ```bash
-$ composer require soved/laravel-gdpr
+$ composer require dialect/gdpr
 ```
 
 After installing the package, you should publish the configuration file:
@@ -20,15 +20,15 @@ After installing the package, you should publish the configuration file:
 ```bash
 $ php artisan vendor:publish --tag=gdpr-config
 ```
-
-Finally, add the `Soved\Laravel\Gdpr\Portable` trait to the `App\User` model:
+####Portability
+Add the `Dialect\Gdpr\Portable` trait to the `App\User` model:
 
 ```php
 <?php
 
 namespace App;
 
-use Soved\Laravel\Gdpr\Portable;
+use Dialect\Gdpr\Portable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -39,7 +39,53 @@ class User extends Authenticatable
 
 ```
 
+####Anonymizable
+Add the `Dialect\Gdpr\Anonymizable` trait to the `App\User` model:
+
+```php
+<?php
+
+namespace App;
+
+use Dialect\Gdpr\Anonymizable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use Anonymizable, Notifiable;
+}
+
+```
+
 ## Configuration
+
+### Configuring Anonymizable Data
+
+On the model, set the `gdprAnonymizableFields`-array by adding the fields you want to anonymize on the model:
+
+```php
+<?php
+
+namespace App;
+
+use Dialect\Gdpr\Anonymizable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use Anonymizable, Notifiable;
+
+    /**
+     * The fields to anonymize in the model.
+     *
+     * @var array
+     */
+    protected $gdprAnonymizableFields = ['name', 'email'];
+}
+
+```
 
 ### Configuring Portable Data
 
@@ -162,21 +208,22 @@ This package exposes an endpoint at `/gdpr/download`. Only authenticated users s
 
 > Before using encryption, you must set a `key` option in your `config/app.php` configuration file. If this value is not properly set, all encrypted values will be insecure.
 
-You may encrypt/decrypt attributes on the fly using the `Soved\Laravel\Gdpr\EncryptsAttributes` trait on any model. The trait expects the `$encrypted` property to be filled with attribute keys:
+You may encrypt/decrypt attributes on the fly using the `Dialect\Gdpr\EncryptsAttributes` trait on any model. The trait expects the `$encrypted` property to be filled with attribute keys:
 
 ```php
 <?php
 
 namespace App;
 
-use Soved\Laravel\Gdpr\Portable;
+use Dialect\Gdpr\Portable;
+use Dialect\Gdpr\Anonymizable;
 use Illuminate\Notifications\Notifiable;
-use Soved\Laravel\Gdpr\EncryptsAttributes;
+use Dialect\Gdpr\EncryptsAttributes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use EncryptsAttributes, Portable, Notifiable;
+    use EncryptsAttributes, Anonymizable, Portable, Notifiable;
 
     /**
      * The attributes that should be encrypted and decrypted on the fly.
@@ -188,9 +235,35 @@ class User extends Authenticatable
 
 ```
 
+###Anonymization
+
+To anonymize a model you call anonymizeThis() on it:
+
+```php
+<?php
+
+namespace App;
+
+use Dialect\Gdpr\Portable;
+use Dialect\Gdpr\Anonymizable;
+use Dialect\Gdpr\EncryptsAttributes;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class SomeController extends Controller
+{
+    public function anonymizeAGroupOfUsers() {
+    	$users = User::where('last_activity', '<=', carbon::now()->submonths(config('gdpr.settings.ttl')))->get();
+    	foreach ($users as $user) {
+            $user->anonymize();
+        }
+    }
+}
+
+```
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within this project, please send an e-mail to Sander de Vos via [sander@tutanota.de](mailto:sander@tutanota.de). All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within this project, please send an e-mail to Dialect via [sander@tutanota.de](mailto:sander@tutanota.de). All security vulnerabilities will be promptly addressed.
 
 ## License
 
