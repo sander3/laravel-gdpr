@@ -29,7 +29,7 @@ class GdprServiceProvider extends ServiceProvider {
 	protected function registerRoutes() {
 		Route::group([
 			'prefix' => config('gdpr.uri'),
-			'namespace' => 'Dialect\Package\Gdpr\Http\Controllers',
+			'namespace' => 'Dialect\Gdpr\Http\Controllers',
 			'middleware' => config('gdpr.middleware'),
 		], function() {
 			$this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
@@ -70,12 +70,12 @@ class GdprServiceProvider extends ServiceProvider {
 	}
 
 	protected function addScheduledJobs() {
-		$this->app->singleton('dialect.package.console.kernel', function($app) {
+		$this->app->singleton('dialect.gdpr.console.kernel', function($app) {
 			$dispatcher = $app->make(\Illuminate\Contracts\Events\Dispatcher::class);
 
-			return new \Dialect\Package\Console\Kernel($app, $dispatcher);
+			return new \Dialect\gdpr\Console\Kernel($app, $dispatcher);
 		});
 
-		$this->app->make('dialect.package.console.kernel');
+		$this->app->make('dialect.gdpr.console.kernel');
 	}
 }
