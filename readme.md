@@ -1,6 +1,6 @@
 # GDPR compliant data portability with ease
 
-This package helps you to be compliant with the GDPR (article 20).
+This package helps you get compliant with GDPR (article 7, 17, 20).
 
 ## Requirements
 
@@ -96,7 +96,7 @@ By default, the entire `toArray` form of the `App\User` model will be made avail
 
 namespace App;
 
-use Soved\Laravel\Gdpr\Portable;
+use Dialect\Gdpr\Portable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -130,7 +130,7 @@ You may need to include a relationship in the data that will be made available f
 
 namespace App;
 
-use Soved\Laravel\Gdpr\Portable;
+use Dialect\Gdpr\Portable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -157,7 +157,7 @@ You may wish to limit the attributes, such as passwords, that are included in th
 
 namespace App;
 
-use Soved\Laravel\Gdpr\Portable;
+use Dialect\Gdpr\Portable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -182,7 +182,7 @@ Alternatively, you may use the `$gdprVisible` property to define a white-list of
 
 namespace App;
 
-use Soved\Laravel\Gdpr\Portable;
+use Dialect\Gdpr\Portable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -263,7 +263,7 @@ class SomeController extends Controller
 ```
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within this project, please send an e-mail to Dialect via [sander@tutanota.de](mailto:sander@tutanota.de). All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within this project, please send an e-mail to Dialect via [katrineholm@dialect.se](mailto:katrineholm@dialect.se). All security vulnerabilities will be promptly addressed.
 
 ## License
 
