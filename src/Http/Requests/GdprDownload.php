@@ -1,6 +1,6 @@
 <?php
 
-namespace Soved\Laravel\Gdpr\Http\Requests;
+namespace Dialect\Gdpr\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

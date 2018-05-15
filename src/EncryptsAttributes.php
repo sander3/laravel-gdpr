@@ -1,6 +1,6 @@
 <?php
 
-namespace Soved\Laravel\Gdpr;
+namespace Dialect\Gdpr;
 
 trait EncryptsAttributes
 {
