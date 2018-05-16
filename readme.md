@@ -62,7 +62,7 @@ class User extends Authenticatable
 
 ### Configuring Anonymizable Data
 
-On the model, set the `gdprAnonymizableFields`-array by adding the fields you want to anonymize on the model:
+On the model, set the `gdprAnonymizableFields`-array by adding the fields you want to anonymize on the model, you can also use closures in the array, if no value for the field exists, default string from settings will be used:
 
 ```php
 <?php
@@ -78,11 +78,35 @@ class User extends Authenticatable
     use Anonymizable, Notifiable;
 
     /**
-     * The fields to anonymize in the model.
+     * The fields to anonymize in the model, using the default string from config.
      *
      * @var array
      */
     protected $gdprAnonymizableFields = ['name', 'email'];
+    
+    /**
+     * The fields to anonymize in the model, replacement strings specified.
+     *
+     * @var array
+     */
+    protected $gdprAnonymizableFields = [
+    	'name' => 'Anonymized User', 
+        'email' => 'anonymous@mail.com'
+    ];
+    
+    /**
+     * The fields to anonymize in the model, using closures.
+     *
+     * @var array
+     */
+    protected $gdprAnonymizableFields = [
+        'name' => function($someString) {
+    	    return $someString;
+        },
+        'email' => function($someEmail) {
+            return $someEmail;
+        },
+    ];
 }
 
 ```

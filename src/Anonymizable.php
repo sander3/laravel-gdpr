@@ -5,18 +5,56 @@ namespace Dialect\Gdpr;
 trait Anonymizable
 {
 	/**
-	 * Convert the model instance to a GDPR compliant data anonymizable array.
+	 * Update the model with anonymized data.
 	 *
 	 * @return array
 	 */
-	public function anonymizable()
+	public function anonymize()
 	{
-		// Only anonymize the fields specified
-		if(isset($this->gdprAnonymizableFields)) {
-			$this->makeVisible($this->gdprAnonymizableFields);
+		$updateArray = array();
+		$tmpArr = array();
+
+		// Eager load the given relations
+		if (isset($this->gdprWith)) {
+			$this->loadMissing($this->gdprWith);
+
+			foreach($this->relations as $key => $val) {
+				if(isset($this->$key->gdprAnonymizableFields)) {
+					foreach($this->$key->gdprAnonymizableFields as $relationKey => $relationVal) {
+						$tmpArr[$relationKey] = $this->parseValue($relationVal);
+					}
+					$updateArray[$key] = $tmpArr;
+				}
+			}
 		}
 
+		// Only anonymize the fields specified
+		if(isset($this->gdprAnonymizableFields)) {
+			foreach($this->gdprAnonymizableFields as $key => $val) {
+				$updateArray[$key] = $this->parseValue($val);
+			}
+		}
+
+		$this->update($updateArray);
+
 		return $this->toAnonymizableArray();
+	}
+
+	/**
+	 * @param null $item
+	 *
+	 * @return mixed|null
+	 */
+	public function parseValue($item = null) {
+		if($item instanceof \Closure){
+			$value = \call_user_func($item());
+		} else if($item) {
+			$value = $item;
+		} else {
+			$value = config('gdpr.string.default');
+		}
+
+		return $value;
 	}
 
 	/**
@@ -27,31 +65,5 @@ trait Anonymizable
 	public function toAnonymizableArray()
 	{
 		return $this->toArray();
-	}
-
-	public function anonymize() {
-		$cols = $this->anonymizable();
-
-		foreach($cols as $colName) {
-			$colType = DB::getSchemaBuilder()->getColumnType($this->table(), $colName);
-
-			switch($colType){
-				case 'string':
-					$replacement = 'xxxxx';
-					break;
-				case 'integer':
-					$replacement = mt_rand(10,100);
-					break;
-				case 'datetime':
-					$int = mt_rand(1262055681,1262055681);
-					$replacement = date("Y-m-d H:i:s",$int);
-					break;
-				default:
-					$replacement = 'xxxxx';
-			}
-
-			$this->$colName = $replacement;
-		}
-		$this->save();
 	}
 }
