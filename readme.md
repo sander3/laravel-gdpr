@@ -1,6 +1,6 @@
 # GDPR compliant data portability with ease
 
-This package helps you to be compliant with the GDPR (article 20).
+This package exposes an endpoint where authenticated users can download their data as required by GDPR article 20.
 
 ## Requirements
 
