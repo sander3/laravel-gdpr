@@ -1,5 +1,9 @@
 # GDPR compliant data portability with ease
 
+[![Latest Stable Version](https://poser.pugx.org/soved/laravel-gdpr/v/stable?format=flat-square)](https://packagist.org/packages/soved/laravel-gdpr)
+[![Monthly Downloads](https://poser.pugx.org/soved/laravel-gdpr/d/monthly?format=flat-square)](https://packagist.org/packages/soved/laravel-gdpr)
+[![License](https://poser.pugx.org/soved/laravel-gdpr/license?format=flat-square)](https://packagist.org/packages/soved/laravel-gdpr)
+
 This package exposes an endpoint where authenticated users can download their data as required by GDPR article 20.
 
 ## Requirements
@@ -158,6 +162,8 @@ class User extends Authenticatable
 
 This package exposes an endpoint at `/gdpr/download`. Only authenticated users should be able to access the routes. Your application should make a POST call, containing the currently authenticated user's password, to this endpoint. The re-authentication is needed to prevent information leakage.
 
+You may listen for the `Soved\Laravel\Gdpr\Events\GdprDownloaded` event, which will be dispatched upon successful re-authentication and data conversion.
+
 ### Encryption
 
 > Before using encryption, you must set a `key` option in your `config/app.php` configuration file. If this value is not properly set, all encrypted values will be insecure.
@@ -190,7 +196,6 @@ class User extends Authenticatable
 
 ## Roadmap
 
-- Dispatch GdprDownload event
 - Data retention
 
 ## Security Vulnerabilities
