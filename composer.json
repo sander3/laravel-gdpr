@@ -1,5 +1,5 @@
 {
-    "name": "Dialect/laravel-gdpr",
+    "name": "dialect/laravel-gdpr",
     "description": "GDPR compliant data portability and anonymization",
     "keywords": ["laravel", "gdpr", "article 20", "data portability", "user anonymization"],
     "type": "library",
