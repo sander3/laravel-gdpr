@@ -1,44 +1,45 @@
 <?php
+
 namespace Dialect\Gdpr\Commands;
 
 use Illuminate\Console\Command;
 
 class AnonymizeInactiveUsers extends Command
 {
-	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $signature = 'gdpr:anonymizeInactiveUsers';
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'Anonymize inactive users';
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $signature = 'gdpr:anonymizeInactiveUsers';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Anonymize inactive users';
 
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * Execute the console command.
-	 *
-	 * @return mixed
-	 */
-	public function handle()
-	{
-		$anonymizableUsers = User::where('last_activity', '<=', carbon::now()->submonths(config('gdpr.settings.ttl')))->get();
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        $anonymizableUsers = User::where('last_activity', '<=', carbon::now()->submonths(config('gdpr.settings.ttl')))->get();
 
-		foreach ($anonymizableUsers as $user) {
-			$user->anonymize();
-		}
-	}
+        foreach ($anonymizableUsers as $user) {
+            $user->anonymize();
+        }
+    }
 }
