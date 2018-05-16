@@ -1,6 +1,6 @@
 <?php
 
-namespace Soved\Laravel\Gdpr;
+namespace Dialect\Gdpr;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -15,6 +15,12 @@ class GdprServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerRoutes();
+
+        // Load standard issue migrations
+        $timestamp = date('Y_m_d_His');
+        $this->publishes([
+            __DIR__.'./migrations/add_last_activity_and_accepted_gdpr_to_users_table.php' => database_path('migrations/'.$timestamp.'add_last_activity_and_accepted_gdpr_to_users_table.php'),
+        ], 'migrations');
     }
 
     /**
@@ -25,11 +31,11 @@ class GdprServiceProvider extends ServiceProvider
     protected function registerRoutes()
     {
         Route::group([
-            'prefix'     => config('gdpr.uri'),
-            'namespace'  => 'Soved\Laravel\Gdpr\Http\Controllers',
+            'prefix' => config('gdpr.uri'),
+            'namespace' => 'Dialect\Gdpr\Http\Controllers',
             'middleware' => config('gdpr.middleware'),
         ], function () {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });
     }
 
@@ -42,6 +48,7 @@ class GdprServiceProvider extends ServiceProvider
     {
         $this->configure();
         $this->offerPublishing();
+        $this->addScheduledJobs();
     }
 
     /**
@@ -51,9 +58,7 @@ class GdprServiceProvider extends ServiceProvider
      */
     protected function configure()
     {
-        $this->mergeConfigFrom(
-            __DIR__ . '/../config/gdpr.php', 'gdpr'
-        );
+        $this->mergeConfigFrom(__DIR__.'/../config/gdpr.php', 'gdpr');
     }
 
     /**
@@ -65,8 +70,19 @@ class GdprServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/gdpr.php' => config_path('gdpr.php'),
+                __DIR__.'/../config/gdpr.php' => config_path('gdpr.php'),
             ], 'gdpr-config');
         }
+    }
+
+    protected function addScheduledJobs()
+    {
+        $this->app->singleton('dialect.gdpr.console.kernel', function ($app) {
+            $dispatcher = $app->make(\Illuminate\Contracts\Events\Dispatcher::class);
+
+            return new \Dialect\gdpr\Console\Kernel($app, $dispatcher);
+        });
+
+        $this->app->make('dialect.gdpr.console.kernel');
     }
 }

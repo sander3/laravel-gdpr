@@ -29,4 +29,32 @@ return [
         'auth',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Settings
+    |--------------------------------------------------------------------------
+    |
+    | This setting specifies the Time To Live in months, before the specified model
+    | is anonymized automatically.
+    |
+    */
+
+    'settings' => [
+        'ttl' => 12,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Settings
+    |--------------------------------------------------------------------------
+    |
+    | This setting specifies the Time To Live in months, before the specified model
+    | is anonymized automatically.
+    |
+    */
+
+    'string' => [
+        'default' => 'Anonymized',
+    ],
+
 ];

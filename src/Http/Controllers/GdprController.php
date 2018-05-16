@@ -1,17 +1,17 @@
 <?php
 
-namespace Soved\Laravel\Gdpr\Http\Controllers;
+namespace Dialect\Gdpr\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Soved\Laravel\Gdpr\Http\Requests\GdprDownload;
+use Dialect\Gdpr\Http\Requests\GdprDownload;
 
 class GdprController extends Controller
 {
     /**
      * Download the GDPR compliant data portability JSON file.
      *
-     * @param  \Soved\Laravel\Gdpr\Http\Requests\GdprDownload  $request
+     * @param  \Dialect\Package\Gdpr\Http\Requests\GdprDownload  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function download(GdprDownload $request)
