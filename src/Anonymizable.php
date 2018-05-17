@@ -40,9 +40,6 @@ trait Anonymizable {
 						$collection = [$collection];
 					}
 					foreach($collection as $item) {
-						if(\is_string($item)){
-							dd($item, $collection);
-						}
 						$item->anonymize($modelChecker);
 					}
 				}
