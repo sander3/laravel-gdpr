@@ -29,12 +29,11 @@ Add the `Dialect\Gdpr\Portable` trait to the `App\User` model:
 namespace App;
 
 use Dialect\Gdpr\Portable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use Portable, Notifiable;
+    use Portable;
 }
 
 ```
@@ -48,12 +47,11 @@ Add the `Dialect\Gdpr\Anonymizable` trait to the `App\User` model:
 namespace App;
 
 use Dialect\Gdpr\Anonymizable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use Anonymizable, Notifiable;
+    use Anonymizable;
 }
 
 ```
@@ -62,20 +60,19 @@ class User extends Authenticatable
 
 ### Configuring Anonymizable Data
 
-On the model, set the `gdprAnonymizableFields`-array by adding the fields you want to anonymize on the model, you can also use closures in the array, if no value for the field exists, default string from settings will be used:
-
+On the model, set the `gdprAnonymizableFields`-array by adding the fields you want to anonymize on the model, 
+you can also use closures in the array, if no value for the field exists, default string from settings will be used.
 ```php
 <?php
 
 namespace App;
 
 use Dialect\Gdpr\Anonymizable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use Anonymizable, Notifiable;
+    use Anonymizable;
 
     /**
      * The fields to anonymize in the model, using the default string from config.
@@ -111,6 +108,48 @@ class User extends Authenticatable
 
 ```
 
+### Recursive Anonymization
+If the model has related models with fields that needs to be anonymized at the same time,
+add the related models to `$gdprWith`. On the related models. add the `Anonymizable` trait and specify the fields with `$gdprAnonymizableFields` like so:
+```php
+<?php
+
+class Order extends Model
+{
+    use Anonymizable;
+		
+	protected $guarded = [];
+	protected $table = 'orders';
+	protected $gdprWith = ['product'];
+    protected $gdprAnonymizableFields = ['buyer' => 'Anonymized Buyer'];
+    
+	public function product()
+	{
+		return $this->belongsTo(Product::class);
+	}
+	public function customer()
+	{
+		return $this->belongsTo(Customer::class);
+	}
+}
+
+class Customer extends Model
+{
+    use Anonymizable;
+	protected $guarded = [];
+	protected $table = 'customers';
+	protected $gdprWith = ['orders'];
+
+	protected $gdprAnonymizableFields = ['name' => 'Anonymized User'];
+
+	public function orders()
+	{
+		return $this->hasMany(Order::class);
+	}
+}
+```
+Calling `$customer->anonymize();` will also change the `buyer`-field on the related orders.
+  
 ### Configuring Portable Data
 
 By default, the entire `toArray` form of the `App\User` model will be made available for download. If you would like to customize the downloadable data, you may override the `toPortableArray()` method on the model:
