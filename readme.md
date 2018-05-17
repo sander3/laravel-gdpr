@@ -20,7 +20,7 @@ After installing the package, you should publish the configuration file:
 ```bash
 $ php artisan vendor:publish --tag=gdpr-config
 ```
-####Portability
+#### Portability
 Add the `Dialect\Gdpr\Portable` trait to the `App\User` model:
 
 ```php
@@ -39,7 +39,7 @@ class User extends Authenticatable
 
 ```
 
-####Anonymizable
+#### Anonymizable
 Add the `Dialect\Gdpr\Anonymizable` trait to the `App\User` model:
 
 ```php
@@ -259,7 +259,7 @@ class User extends Authenticatable
 
 ```
 
-###Anonymization
+### Anonymization
 
 To anonymize a model you call anonymizeThis() on it:
 
@@ -289,7 +289,7 @@ class SomeController extends Controller
 
 If you discover a security vulnerability within this project, please send an e-mail to Dialect via [katrineholm@dialect.se](mailto:katrineholm@dialect.se). All security vulnerabilities will be promptly addressed.
 
-##Credit
+## Credit
 
 [sander3](https://github.com/sander3): Author of the original package used as a startingpoint
 

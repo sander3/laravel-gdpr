@@ -2,69 +2,77 @@
 
 namespace Dialect\Gdpr;
 
-trait Anonymizable
-{
-    /**
-     * Update the model with anonymized data.
-     *
-     * @return array
-     */
-    public function anonymize()
-    {
-        $updateArray = [];
-        $tmpArr = [];
+use Illuminate\Database\Eloquent\Collection;
 
-        // Eager load the given relations
-        if (isset($this->gdprWith)) {
-            $this->loadMissing($this->gdprWith);
+trait Anonymizable {
+	/**
+	 * Update the model with anonymized data.
+	 *
+	 * @return array
+	 */
+	public function anonymize($modelChecker = []) {
+		$updateArray = [];
 
-            foreach ($this->relations as $key => $val) {
-                if (isset($this->$key->gdprAnonymizableFields)) {
-                    foreach ($this->$key->gdprAnonymizableFields as $relationKey => $relationVal) {
-                        $tmpArr[$relationKey] = $this->parseValue($relationVal);
-                    }
-                    $updateArray[$key] = $tmpArr;
-                }
-            }
-        }
+		// Only anonymize the fields specified
+		if($this->gdprAnonymizableFields !== null) {
+			foreach($this->gdprAnonymizableFields as $key => $val) {
+				if(\is_int($key)){
+					$updateArray[ $val ] = $this->parseValue($val);
+				} else {
+					$updateArray[ $key ] = $this->parseValue($val);
+				}
+			}
+		}
 
-        // Only anonymize the fields specified
-        if (isset($this->gdprAnonymizableFields)) {
-            foreach ($this->gdprAnonymizableFields as $key => $val) {
-                $updateArray[$key] = $this->parseValue($val);
-            }
-        }
+		// Update this model
+		if(\count($updateArray)){
+			$this->update($updateArray);
+		}
 
-        $this->update($updateArray);
+		// Eager load the given relations
+		if($this->gdprWith !== null) {
+			$this->loadMissing($this->gdprWith);
+			// Recursively update all related models
+			foreach($this->getRelations() as $relationName => $collection) {
+				if(!array_key_exists($relationName, $modelChecker)) {
+					array_push($modelChecker, $relationName);
+					if(!($collection instanceof Collection)){
+						$collection = [$collection];
+					}
+					foreach($collection as $item) {
+						if(\is_string($item)){
+							dd($item, $collection);
+						}
+						$item->anonymize($modelChecker);
+					}
+				}
+			}
+		}
+	}
 
-        return $this->toAnonymizableArray();
-    }
+	/**
+	 * @param null $item
+	 *
+	 * @return mixed|null
+	 */
+	public function parseValue($item = null) {
+		if($item instanceof \Closure) {
+			$value = \call_user_func($item());
+		} else if($item == null) {
+			$value = $item;
+		} else {
+			$value = config('gdpr.string.default');
+		}
 
-    /**
-     * @param null $item
-     *
-     * @return mixed|null
-     */
-    public function parseValue($item = null)
-    {
-        if ($item instanceof \Closure) {
-            $value = \call_user_func($item());
-        } elseif ($item) {
-            $value = $item;
-        } else {
-            $value = config('gdpr.string.default');
-        }
+		return $value;
+	}
 
-        return $value;
-    }
-
-    /**
-     * Get the GDPR compliant data anonymizable array for the model.
-     *
-     * @return array
-     */
-    public function toAnonymizableArray()
-    {
-        return $this->toArray();
-    }
+	/**
+	 * Get the GDPR compliant data anonymizable array for the model.
+	 *
+	 * @return array
+	 */
+	public function toAnonymizableArray() {
+		return $this->toArray();
+	}
 }

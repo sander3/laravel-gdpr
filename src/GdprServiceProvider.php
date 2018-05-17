@@ -32,10 +32,10 @@ class GdprServiceProvider extends ServiceProvider
     {
         Route::group([
             'prefix' => config('gdpr.uri'),
-            'namespace' => 'Dialect\Gdpr\Http\Controllers',
+            'namespace' => 'Dialect\Gdpr\src\Http\Controllers',
             'middleware' => config('gdpr.middleware'),
         ], function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+            $this->loadRoutesFrom(__DIR__.'/routes/web.php');
         });
     }
 
@@ -58,7 +58,7 @@ class GdprServiceProvider extends ServiceProvider
      */
     protected function configure()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/gdpr.php', 'gdpr');
+        $this->mergeConfigFrom(__DIR__.'/config/gdpr.php', 'gdpr');
     }
 
     /**
@@ -80,7 +80,7 @@ class GdprServiceProvider extends ServiceProvider
         $this->app->singleton('dialect.gdpr.console.kernel', function ($app) {
             $dispatcher = $app->make(\Illuminate\Contracts\Events\Dispatcher::class);
 
-            return new \Dialect\gdpr\Console\Kernel($app, $dispatcher);
+            return new console\Kernel($app, $dispatcher);
         });
 
         $this->app->make('dialect.gdpr.console.kernel');
