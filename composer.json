@@ -3,13 +3,21 @@
     "description": "GDPR compliant data portability and anonymization",
     "keywords": ["laravel", "gdpr", "article 20", "data portability", "user anonymization"],
     "type": "library",
+    "homepage": "https://github.com/dialect-katrineholm/laravel-gdpr",
     "require": {
-        "php": ">=7.0.0",
-        "laravel/framework": "~5.5"
+        "php": ">=7.0.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "~3.0"
     },
     "autoload": {
         "psr-4": {
-            "Dialect\\Gdpr\\": "src/"
+            "Dialect\\Gdpr\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dialect\\Gdpr\\": "tests"
         }
     },
     "license": "MIT",

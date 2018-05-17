@@ -2,6 +2,8 @@
 
 namespace Dialect\Gdpr;
 
+use Illuminate\Database\Eloquent\Collection;
+
 trait Anonymizable
 {
     /**
@@ -9,35 +11,42 @@ trait Anonymizable
      *
      * @return array
      */
-    public function anonymize()
+    public function anonymize($modelChecker = [])
     {
         $updateArray = [];
-        $tmpArr = [];
 
-        // Eager load the given relations
-        if (isset($this->gdprWith)) {
-            $this->loadMissing($this->gdprWith);
-
-            foreach ($this->relations as $key => $val) {
-                if (isset($this->$key->gdprAnonymizableFields)) {
-                    foreach ($this->$key->gdprAnonymizableFields as $relationKey => $relationVal) {
-                        $tmpArr[$relationKey] = $this->parseValue($relationVal);
-                    }
-                    $updateArray[$key] = $tmpArr;
+        // Only anonymize the fields specified
+        if ($this->gdprAnonymizableFields !== null) {
+            foreach ($this->gdprAnonymizableFields as $key => $val) {
+                if (\is_int($key)) {
+                    $updateArray[$val] = $this->parseValue($val);
+                } else {
+                    $updateArray[$key] = $this->parseValue($val);
                 }
             }
         }
 
-        // Only anonymize the fields specified
-        if (isset($this->gdprAnonymizableFields)) {
-            foreach ($this->gdprAnonymizableFields as $key => $val) {
-                $updateArray[$key] = $this->parseValue($val);
-            }
+        // Update this model
+        if (\count($updateArray)) {
+            $this->update($updateArray);
         }
 
-        $this->update($updateArray);
-
-        return $this->toAnonymizableArray();
+        // Eager load the given relations
+        if ($this->gdprWith !== null) {
+            $this->loadMissing($this->gdprWith);
+            // Recursively update all related models
+            foreach ($this->getRelations() as $relationName => $collection) {
+                if (! array_key_exists($relationName, $modelChecker)) {
+                    array_push($modelChecker, $relationName);
+                    if (! ($collection instanceof Collection)) {
+                        $collection = [$collection];
+                    }
+                    foreach ($collection as $item) {
+                        $item->anonymize($modelChecker);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -49,7 +58,7 @@ trait Anonymizable
     {
         if ($item instanceof \Closure) {
             $value = \call_user_func($item());
-        } elseif ($item) {
+        } elseif ($item == null) {
             $value = $item;
         } else {
             $value = config('gdpr.string.default');

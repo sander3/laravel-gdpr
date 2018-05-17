@@ -1,6 +1,6 @@
 <?php
 
-namespace Dialect\Gdpr\Console;
+namespace Dialect\Gdpr\console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
