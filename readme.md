@@ -62,39 +62,27 @@ class User extends Model
 
 On the model, set the `gdprAnonymizableFields`-array by adding the fields you want to anonymize on the model, 
 you can also use closures in the array, if no value for the field exists, default string from settings will be used.
-```php
-<?php
-
-namespace App;
-
-use Dialect\Gdpr\Anonymizable;
-use Illuminate\Database\Eloquent\Model;
-
-class User extends Model
-{
-    use Anonymizable;
-
+```
     /**
-     * The fields to anonymize in the model, using the default string from config.
-     *
-     * @var array
+     * Using the default string from config.
      */
-    protected $gdprAnonymizableFields = ['name', 'email'];
-    
+    protected $gdprAnonymizableFields = [
+        'name', 
+        'email'
+    ];
+```
+```
     /**
-     * The fields to anonymize in the model, replacement strings specified.
-     *
-     * @var array
+     * Using replacement strings.
      */
     protected $gdprAnonymizableFields = [
     	'name' => 'Anonymized User', 
         'email' => 'anonymous@mail.com'
     ];
-    
+```
+```
     /**
-     * The fields to anonymize in the model, using closures.
-     *
-     * @var array
+     * Using closures.
      */
     protected $gdprAnonymizableFields = [
         'name' => function($someString) {
