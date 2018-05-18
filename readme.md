@@ -4,9 +4,9 @@
 
 This package helps you get compliant with GDPR;
 
-Article **7**: Conditions for consent
-Article **17**: Right to be forgotten
-Article **20**: Right to data portability
+Article **7**: Conditions for consent <br>
+Article **17**: Right to be forgotten <br>
+Article **20**: Right to data portability <br>
 
 Table of contents
 =================
