@@ -36,7 +36,7 @@ Table of contents
 First, install the package via the Composer package manager:
 
 ```bash
-$ composer require dialect/gdpr
+$ composer require dialect/laravel-gdpr-compliance
 ```
 
 After installing the package, you should publish the configuration file:
