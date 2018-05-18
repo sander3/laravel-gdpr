@@ -1,9 +1,9 @@
 {
-    "name": "dialect/laravel-gdpr",
+    "name": "dialect/laravel-gdpr-compliance",
     "description": "GDPR compliant data portability and anonymization",
     "keywords": ["laravel", "gdpr", "article 20", "data portability", "user anonymization"],
     "type": "library",
-    "homepage": "https://github.com/dialect-katrineholm/laravel-gdpr",
+    "homepage": "https://github.com/dialect-katrineholm/laravel-gdpr-compliance",
     "require": {
         "php": ">=7.0.0"
     },
