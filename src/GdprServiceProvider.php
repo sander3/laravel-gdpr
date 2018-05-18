@@ -19,15 +19,15 @@ class GdprServiceProvider extends ServiceProvider
         // Load standard issue migrations
         $timestamp = date('Y_m_d_His');
         $this->publishes([
-            __DIR__.'./migrations/add_last_activity_and_accepted_gdpr_to_users_table.php' => database_path('migrations/'.$timestamp.'add_last_activity_and_accepted_gdpr_to_users_table.php'),
+            __DIR__.'/migrations/add_last_activity_and_accepted_gdpr_to_users_table.php' => database_path('migrations/'.$timestamp.'_add_last_activity_and_accepted_gdpr_to_users_table.php'),
         ], 'gdpr-consent');
 
 	    $this->publishes([
-		    __DIR__.'./views/message.blade.php' => base_path('resources/views/gdpr')
+		    __DIR__.'/views/message.blade.php' => base_path('resources/views/gdpr')
 	    ], 'gdpr-consent');
 
 	    $this->publishes([
-		    __DIR__.'./middleware/RedirectIfUnansweredTerms.php' => base_path('app/Http/middleware'),
+		    __DIR__.'/middleware/RedirectIfUnansweredTerms.php' => base_path('app/Http/middleware'),
 	    ], 'gdpr-consent');
     }
 
@@ -78,7 +78,7 @@ class GdprServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/gdpr.php' => config_path('gdpr.php'),
+                __DIR__.'/config/gdpr.php' => config_path('gdpr.php'),
             ], 'gdpr-config');
         }
     }
