@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/dialect-katrineholm/laravel-gdpr-compliance.svg?branch=master)](https://travis-ci.org/dialect-katrineholm/laravel-gdpr-compliance)
 # GDPR compliant data portability with ease
 
 This package helps you get compliant with GDPR (article 7, 17, 20).
