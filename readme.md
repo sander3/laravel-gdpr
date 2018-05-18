@@ -2,7 +2,31 @@
 
 This package helps you get compliant with GDPR (article 7, 17, 20).
 
-## Requirements
+Table of contents
+=================
+
+<!--ts-->
+   * [Table of contents](#table-of-contents)
+   * [Dependencies](#dependencies)
+   * [Installation](#installation)
+   * [Configuration](#configuration)
+      * [Portability](#portability)
+      * [Anonymizable](#anonymizable)
+      * [Configuring Anonymizable Data](#configuring-anonymizable-data)
+      * [Recursive Anonymization](#recursive-anonymization)
+      * [Configuring Portable Data](#configuring-portable-data)
+      * [Lazy Eager Loading Relationships](#lazy-eager-loading-relationships)
+      * [Hiding Attributes](#hiding-attributes)
+   * [Usage](#usage)
+      * [Encryption](#encryption)
+      * [Anonymization](#anonymization)
+   * [Tests](#tests)
+   * [Security Vulnerabilities](#security-vulnerabilities)
+   * [Credit](#credit)
+   * [License](#license)
+<!--te-->
+
+## Dependencies
 
 - PHP >= 7.0.0
 - Laravel >= 5.5
@@ -18,18 +42,41 @@ $ composer require dialect/gdpr
 After installing the package, you should publish the configuration file:
 
 ```bash
-$ php artisan vendor:publish --tag=gdpr-config
+$ php artisan vendor:publish --provider="Dialect\Gdpr\GdprServiceProvider" --tag=gdpr-config
 ```
+
+## Configuration
+
+#### GDPR Consent
+The package includes a way for users to sign a GDPR-agreement. This will redirect the user to the agreement on the specified routes
+until the user has agreed to the new terms.
+
+To add the agreement functionality:
+
+1. Publish the middleware: <br>
+    `php artisan vendor:publish --provider="Dialect\Gdpr\GdprServiceProvider" --tag=gdpr-consent`
+2. Add `'gdpr.terms' => \App\Http\Middleware\RedirectIfUnansweredTerms::class` <br>
+    to the `$routeMiddleware` middlewaregroup in `app/Http/Kernel` like so: <br>
+    ```php
+        protected $routeMiddleware = [
+            'gdpr.terms' => \App\Http\Middleware\RedirectIfUnansweredTerms::class,
+        ];
+    ```
+3. Add the middleware to the routes that you want to check (normally the routes where auth is used):
+    ```php
+    Route::group(['middleware' => ['auth', 'gdpr.terms']], function () {
+       Route::get('/', 'HomeController@index');
+    }
+    ```
+4. Change the Agreement text to your particular needs in `resources/views/gdpr/message.blade.php`
+
 #### Portability
-Add the `Dialect\Gdpr\Portable` trait to the `App\User` model:
+Add the `Portable` trait to the model model you want to be able to port:
 
 ```php
-<?php
-
 namespace App;
 
 use Dialect\Gdpr\Portable;
-use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
@@ -39,15 +86,12 @@ class User extends Model
 ```
 
 #### Anonymizable
-Add the `Dialect\Gdpr\Anonymizable` trait to the `App\User` model:
+Add the `Anonymizable` trait to the model you want to be able to anonymize:
 
 ```php
-<?php
-
 namespace App;
 
 use Dialect\Gdpr\Anonymizable;
-use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
@@ -56,11 +100,9 @@ class User extends Model
 
 ```
 
-## Configuration
-
 ### Configuring Anonymizable Data
 
-On the model, set the `gdprAnonymizableFields`-array by adding the fields you want to anonymize on the model, 
+On the model, set `gdprAnonymizableFields` by adding the fields you want to anonymize on the model, 
 you can also use closures in the array, if no value for the field exists, default string from settings will be used.
 ```
     /**
@@ -100,8 +142,6 @@ you can also use closures in the array, if no value for the field exists, defaul
 If the model has related models with fields that needs to be anonymized at the same time,
 add the related models to `$gdprWith`. On the related models. add the `Anonymizable` trait and specify the fields with `$gdprAnonymizableFields` like so:
 ```php
-<?php
-
 class Order extends Model
 {
     use Anonymizable;
@@ -120,7 +160,8 @@ class Order extends Model
 		return $this->belongsTo(Customer::class);
 	}
 }
-
+```
+```php
 class Customer extends Model
 {
     use Anonymizable;
@@ -143,17 +184,11 @@ Calling `$customer->anonymize();` will also change the `buyer`-field on the rela
 By default, the entire `toArray` form of the `App\User` model will be made available for download. If you would like to customize the downloadable data, you may override the `toPortableArray()` method on the model:
 
 ```php
-<?php
-
-namespace App;
-
 use Dialect\Gdpr\Portable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use Portable, Notifiable;
+    use Portable;
 
     /**
      * Get the GDPR compliant data portability array for the model.
@@ -177,17 +212,11 @@ class User extends Authenticatable
 You may need to include a relationship in the data that will be made available for download. To do so, add a `$gdprWith` property to your `App\User` model:
 
 ```php
-<?php
-
-namespace App;
-
 use Dialect\Gdpr\Portable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use Portable, Notifiable;
+    use Portable;
 
     /**
      * The relations to include in the downloadable data.
@@ -204,17 +233,11 @@ class User extends Authenticatable
 You may wish to limit the attributes, such as passwords, that are included in the downloadable data. To do so, add a `$gdprHidden` property to your `App\User` model:
 
 ```php
-<?php
-
-namespace App;
-
 use Dialect\Gdpr\Portable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use Portable, Notifiable;
+    use Portable;
 
     /**
      * The attributes that should be hidden for the downloadable data.
@@ -229,17 +252,11 @@ class User extends Authenticatable
 Alternatively, you may use the `$gdprVisible` property to define a white-list of attributes that should be included in the data that will be made available for download. All other attributes will be hidden when the model is converted:
 
 ```php
-<?php
-
-namespace App;
-
 use Dialect\Gdpr\Portable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Moeld
 {
-    use Portable, Notifiable;
+    use Portable;
 
     /**
      * The attributes that should be visible in the downloadable data.
@@ -259,22 +276,15 @@ This package exposes an endpoint at `/gdpr/download`. Only authenticated users s
 
 > Before using encryption, you must set a `key` option in your `config/app.php` configuration file. If this value is not properly set, all encrypted values will be insecure.
 
-You may encrypt/decrypt attributes on the fly using the `Dialect\Gdpr\EncryptsAttributes` trait on any model. The trait expects the `$encrypted` property to be filled with attribute keys:
+You may encrypt/decrypt attributes on the fly using the `EncryptsAttributes` trait on any model. 
+The trait expects the `$encrypted` property to be filled with attribute keys:
 
 ```php
-<?php
-
-namespace App;
-
-use Dialect\Gdpr\Portable;
-use Dialect\Gdpr\Anonymizable;
-use Illuminate\Notifications\Notifiable;
 use Dialect\Gdpr\EncryptsAttributes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use EncryptsAttributes, Anonymizable, Portable, Notifiable;
+    use EncryptsAttributes;
 
     /**
      * The attributes that should be encrypted and decrypted on the fly.
@@ -288,19 +298,9 @@ class User extends Authenticatable
 
 ### Anonymization
 
-To anonymize a model you call anonymizeThis() on it:
+To anonymize a model you call `anonymize()` on it:
 
 ```php
-<?php
-
-namespace App;
-
-use Dialect\Gdpr\Portable;
-use Dialect\Gdpr\Anonymizable;
-use Dialect\Gdpr\EncryptsAttributes;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
 class SomeController extends Controller
 {
     public function anonymizeAGroupOfUsers() {
@@ -312,6 +312,10 @@ class SomeController extends Controller
 }
 
 ```
+## Tests
+
+After installation you can run the package tests from your laravel-root folder with `phpunit vendor/Dialect/gdpr`
+
 ## Security Vulnerabilities
 
 If you discover a security vulnerability within this project, please send an e-mail to Dialect via [katrineholm@dialect.se](mailto:katrineholm@dialect.se). All security vulnerabilities will be promptly addressed.

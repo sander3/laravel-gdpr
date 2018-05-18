@@ -31,4 +31,29 @@ class GdprController extends Controller
             ]
         );
     }
+
+	/**
+	 * Shows The GDPR terms to the user
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function showTerms() {
+		return view('users.gdpr');
+	}
+
+	/**
+	 * Saves the users acceptance of terms and the time of acceptance.
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function termsAccepted() {
+		$user = Auth::user();
+
+		$user->update([
+			'accepted_gdpr' => true,
+			'accepted_gdpr_at' => Carbon::now(),
+		]);
+
+		return redirect()->to('/');
+	}
 }
