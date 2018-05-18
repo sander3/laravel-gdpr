@@ -1,0 +1,15 @@
+sudo: required
+
+language: php
+
+php:
+  - 7.1
+  - 7.2
+before_install:
+  - travis_retry composer self-update
+
+before_script:
+  - travis_retry composer install --prefer-dist --no-interaction
+
+script:
+  - phpunit
