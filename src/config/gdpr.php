@@ -45,12 +45,12 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Settings
+    | String
     |--------------------------------------------------------------------------
     |
-    | This setting specifies the Time To Live in months, before the specified model
-    | is anonymized automatically.
+    | This is the default string the fields will change to
     |
+    |d
     */
 
     'string' => [

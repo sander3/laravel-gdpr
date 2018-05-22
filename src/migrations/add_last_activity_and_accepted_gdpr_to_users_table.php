@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class add_last_activity_and_accepted_gdpr_to_users_table extends Migration
+class AddLastActivityAndAcceptedGdprToUsersTable extends Migration
 {
     /**
      * Run the migrations.
