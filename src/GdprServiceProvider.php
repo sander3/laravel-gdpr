@@ -2,9 +2,10 @@
 
 namespace Dialect\Gdpr;
 
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Http\Kernel;
+
 class GdprServiceProvider extends ServiceProvider
 {
     /**
@@ -22,13 +23,13 @@ class GdprServiceProvider extends ServiceProvider
             __DIR__.'/migrations/add_last_activity_and_accepted_gdpr_to_users_table.php' => database_path('migrations/'.$timestamp.'_add_last_activity_and_accepted_gdpr_to_users_table.php'),
         ], 'gdpr-consent');
 
-	    $this->publishes([
-		    __DIR__.'/views/message.blade.php' => base_path('resources/views/gdpr')
-	    ], 'gdpr-consent');
+        $this->publishes([
+            __DIR__.'/views/message.blade.php' => base_path('resources/views/gdpr'),
+        ], 'gdpr-consent');
 
-	    $this->publishes([
-		    __DIR__.'/middleware/RedirectIfUnansweredTerms.php' => base_path('app/Http/middleware/RedirectIfUnansweredTerms.php'),
-	    ], 'gdpr-consent');
+        $this->publishes([
+            __DIR__.'/middleware/RedirectIfUnansweredTerms.php' => base_path('app/Http/middleware/RedirectIfUnansweredTerms.php'),
+        ], 'gdpr-consent');
     }
 
     /**
