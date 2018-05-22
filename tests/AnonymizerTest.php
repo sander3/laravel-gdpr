@@ -14,7 +14,7 @@ class AnonymizerTest extends TestCase
     public function it_can_anonymize_model_with_fields_only()
     {
         $oldName = $this->customer->name;
-	    $this->customer->anonymize();
+        $this->customer->anonymize();
 
         $this->assertNotEquals($this->customer->fresh()->name, $oldName);
     }
