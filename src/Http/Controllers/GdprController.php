@@ -1,8 +1,7 @@
 <?php
 
-namespace Dialect\Gdpr\Http\Controllers;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Dialect\Gdpr\Http\Requests\GdprDownload;
 
@@ -53,7 +52,6 @@ class GdprController extends Controller
 
         $user->update([
             'accepted_gdpr' => true,
-            'accepted_gdpr_at' => Carbon::now(),
         ]);
 
         return redirect()->to('/');
