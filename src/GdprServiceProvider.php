@@ -22,7 +22,7 @@ class GdprServiceProvider extends ServiceProvider
             __DIR__.'/migrations/add_last_activity_and_accepted_gdpr_to_users_table.php' => database_path('migrations/'.$timestamp.'_add_last_activity_and_accepted_gdpr_to_users_table.php'),
             __DIR__.'/views/message.blade.php' => base_path('resources/views/gdpr/message.blade.php'),
             __DIR__.'/middleware/RedirectIfUnansweredTerms.php' => base_path('app/Http/Middleware/RedirectIfUnansweredTerms.php'),
-	        __DIR__.'/Http/Controllers/GdprController.php' => base_path('app/Http/Controllers/GdprController.php'),
+            __DIR__.'/Http/Controllers/GdprController.php' => base_path('app/Http/Controllers/GdprController.php'),
         ], 'gdpr-consent');
     }
 
