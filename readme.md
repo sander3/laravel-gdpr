@@ -13,7 +13,7 @@ Table of contents
    * [Installation](#installation)
    * [Configuration](#configuration)
       * [Portability](#portability)
-      * [Anonymizable](#anonymizable)
+      * [Anonymizability](#anonymizability)
       * [Configuring Anonymizable Data](#configuring-anonymizable-data)
       * [Recursive Anonymization](#recursive-anonymization)
       * [Configuring Portable Data](#configuring-portable-data)
@@ -87,8 +87,24 @@ class User extends Model
 
 ```
 
-#### Anonymizable
+#### Anonymizability
 Add the `Anonymizable` trait to the model you want to be able to anonymize:
+
+```php
+namespace App;
+
+use Dialect\Gdpr\Anonymizable;
+
+class User extends Model
+{
+    use Anonymizable;
+}
+
+```
+
+#### Automatic Anonymization of inactive users
+The package adds a scheduled job intended to anonymize the `User` model automatically when the user has been inactive for a time.
+To specify the time, edit the `ttl` setting in the published config
 
 ```php
 namespace App;
