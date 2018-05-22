@@ -27,7 +27,7 @@ class GdprServiceProvider extends ServiceProvider
 	    ], 'gdpr-consent');
 
 	    $this->publishes([
-		    __DIR__.'/middleware/RedirectIfUnansweredTerms.php' => base_path('app/Http/middleware/RedirectIfUnansweredTerms.php'),
+		    __DIR__.'/middleware/RedirectIfUnansweredTerms.php' => base_path('app/Http/Middleware/RedirectIfUnansweredTerms.php'),
 	    ], 'gdpr-consent');
     }
 
