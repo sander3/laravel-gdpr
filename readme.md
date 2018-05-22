@@ -1,8 +1,13 @@
 [![Build Status](https://travis-ci.org/dialect-katrineholm/laravel-gdpr-compliance.svg?branch=master)](https://travis-ci.org/dialect-katrineholm/laravel-gdpr-compliance)
 [![StyleCI](https://github.styleci.io/repos/133474603/shield?branch=master)](https://github.styleci.io/repos/133474603)
-# GDPR compliant data portability with ease
+[![codecov](https://codecov.io/gh/dialect-katrineholm/laravel-gdpr-compliance/branch/master/graph/badge.svg)](https://codecov.io/gh/dialect-katrineholm/laravel-gdpr-compliance)
+# GDPR compliant data handling with ease
 
-This package helps you get compliant with GDPR (article 7, 17, 20).
+This package helps you get compliant with GDPR;
+
+Article **7**: Conditions for consent <br>
+Article **17**: Right to be forgotten <br>
+Article **20**: Right to data portability <br>
 
 Table of contents
 =================
