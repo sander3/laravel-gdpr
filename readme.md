@@ -111,15 +111,23 @@ Add the `Anonymizable` trait to the model you want to be able to anonymize:
 #### Automatic Anonymization of inactive users
 The package adds a scheduled job intended to anonymize the `User` model automatically when the user has been inactive for a specific time.
 To specify the time, edit the `ttl` setting in the published config. <br>
-To activate this feature, add the schedule to the schedule function in `app/Console/Kernel.php` like so:
+To activate this feature:
+1. Add the command to the schedule function in `app/Console/Kernel.php` like so:
 
-```
-    protected function schedule(Schedule $schedule)
-    {
-        $schedule->command('gdpr:anonymizeInactiveUsers')->daily();
-    }
-```
+    ```
+        protected function schedule(Schedule $schedule)
+        {
+            $schedule->command('gdpr:anonymizeInactiveUsers')->daily();
+        }
+    ```
+2.    Add the class to the `$commands` array in the same file like so:
 
+    ```
+        protected $commands = [
+            \App\Console\Commands\AnonymizeInactiveUsers::class,
+        ];
+    ```
+   
 ### Configuring Anonymizable Data
 
 On the model, set `gdprAnonymizableFields` by adding the fields you want to anonymize on the model, 
