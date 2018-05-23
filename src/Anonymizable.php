@@ -19,8 +19,8 @@ trait Anonymizable
         // Only anonymize the fields specified
         if ($this->gdprAnonymizableFields !== null) {
             foreach ($this->gdprAnonymizableFields as $key => $val) {
-                if (method_exists($this, 'getAnonymized'.Str::studly($key))) {
-                    $updateArray[$val] = $this->{'getAnonymized'.Str::studly($key)}($val);
+                if (method_exists($this, 'getAnonymized'.Str::studly($val))) {
+                    $updateArray[$val] = $this->{'getAnonymized'.Str::studly($val)}();
                 } else {
                     if (\is_int($key)) {
                         $updateArray[$val] = $this->parseValue($val);
