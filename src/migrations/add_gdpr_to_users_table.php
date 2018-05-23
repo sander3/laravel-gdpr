@@ -15,6 +15,7 @@ class AddLastActivityAndAcceptedGdprToUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->datetime('last_activity')->nullable()->default(null);
             $table->boolean('accepted_gdpr')->nullable()->default(null);
+            $table->boolean('isAnonymized')->default(false);
         });
     }
 
@@ -28,6 +29,7 @@ class AddLastActivityAndAcceptedGdprToUsersTable extends Migration
         Schema::table('users', function ($table) {
             $table->dropColumn('last_activity');
             $table->dropColumn('accepted_gdpr');
+            $table->dropColumn('isAnonymized');
         });
     }
 }

@@ -19,6 +19,7 @@ Table of contents
    * [Configuration](#configuration)
       * [Portability](#portability)
       * [Anonymizability](#anonymizability)
+      * [Automatic anonymization](#Automatic Anonymization of inactive users)
       * [Configuring Anonymizable Data](#configuring-anonymizable-data)
       * [Recursive Anonymization](#recursive-anonymization)
       * [Configuring Portable Data](#configuring-portable-data)
@@ -71,9 +72,9 @@ To add the agreement functionality:
     ```
 3. Add the middleware to the routes that you want to check (normally the routes where auth is used):
     ```php
-    Route::group(['middleware' => ['auth', 'gdpr.terms']], function () {
-       Route::get('/', 'HomeController@index');
-    }
+        Route::group(['middleware' => ['auth', 'gdpr.terms']], function () {
+           Route::get('/', 'HomeController@index');
+        }
     ```
 4. Change the Agreement text to your particular needs in `resources/views/gdpr/message.blade.php`
 
@@ -81,14 +82,14 @@ To add the agreement functionality:
 Add the `Portable` trait to the model model you want to be able to port:
 
 ```php
-namespace App;
-
-use Dialect\Gdpr\Portable;
-
-class User extends Model
-{
-    use Portable;
-}
+    namespace App;
+    
+    use Dialect\Gdpr\Portable;
+    
+    class User extends Model
+    {
+        use Portable;
+    }
 
 ```
 
@@ -96,33 +97,37 @@ class User extends Model
 Add the `Anonymizable` trait to the model you want to be able to anonymize:
 
 ```php
-namespace App;
-
-use Dialect\Gdpr\Anonymizable;
-
-class User extends Model
-{
-    use Anonymizable;
-}
+    namespace App;
+    
+    use Dialect\Gdpr\Anonymizable;
+    
+    class User extends Model
+    {
+        use Anonymizable;
+    }
 
 ```
 
 #### Automatic Anonymization of inactive users
-The package adds a scheduled job intended to anonymize the `User` model automatically when the user has been inactive for a time.
-To specify the time, edit the `ttl` setting in the published config
+The package adds a scheduled job intended to anonymize the `User` model automatically when the user has been inactive for a specific time.
+To specify the time, edit the `ttl` setting in the published config. <br>
+To activate this feature:
+1. Add the command to the schedule function in `app/Console/Kernel.php` like so:
 
-```php
-namespace App;
+    ```
+        protected function schedule(Schedule $schedule)
+        {
+            $schedule->command('gdpr:anonymizeInactiveUsers')->daily();
+        }
+    ```
+2.    Add the class to the `$commands` array in the same file like so:
 
-use Dialect\Gdpr\Anonymizable;
-
-class User extends Model
-{
-    use Anonymizable;
-}
-
-```
-
+    ```
+        protected $commands = [
+            \App\Console\Commands\AnonymizeInactiveUsers::class,
+        ];
+    ```
+   
 ### Configuring Anonymizable Data
 
 On the model, set `gdprAnonymizableFields` by adding the fields you want to anonymize on the model, 
