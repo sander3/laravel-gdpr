@@ -9,3 +9,7 @@ Route::post('terms_accepted', [
     'as' => 'terms_accepted',
     'uses' => 'GdprController@termsAccepted',
 ]);
+Route::post('terms_denied', [
+	'as' => 'terms_denied',
+	'uses' => 'GdprController@termsDenied',
+]);

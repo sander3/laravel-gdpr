@@ -16,7 +16,7 @@ class RedirectIfUnansweredTerms
      */
     public function handle($request, Closure $next)
     {
-        if (! Auth::user()->accepted_gdpr) {
+        if (Auth::user()->accepted_gdpr === null) {
             return redirect('/show_terms');
         }
 
