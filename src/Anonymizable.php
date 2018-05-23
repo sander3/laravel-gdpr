@@ -3,6 +3,7 @@
 namespace Dialect\Gdpr;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 
 trait Anonymizable
 {
