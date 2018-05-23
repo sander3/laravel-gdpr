@@ -2,9 +2,9 @@
 
 namespace Dialect\Gdpr;
 
-use Dialect\Gdpr\Commands\AnonymizeInactiveUsers;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Dialect\Gdpr\Commands\AnonymizeInactiveUsers;
 
 class GdprServiceProvider extends ServiceProvider
 {
@@ -16,14 +16,14 @@ class GdprServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerRoutes();
-	    $this->registerCommands();
+        $this->registerCommands();
         // Load standard issue migrations
         $timestamp = date('Y_m_d_His');
         $this->publishes([
-	        __DIR__ . '/migrations/add_gdpr_to_users_table.php' => database_path('migrations/' . $timestamp . '_add_gdpr_to_users_table.php'),
+            __DIR__.'/migrations/add_gdpr_to_users_table.php' => database_path('migrations/'.$timestamp.'_add_gdpr_to_users_table.php'),
             __DIR__.'/views/message.blade.php' => base_path('resources/views/gdpr/message.blade.php'),
             __DIR__.'/middleware/RedirectIfUnansweredTerms.php' => base_path('app/Http/Middleware/RedirectIfUnansweredTerms.php'),
-	        __DIR__.'/Http/Controllers/GdprController.php' => base_path('app/Http/Controllers/GdprController.php'),
+            __DIR__.'/Http/Controllers/GdprController.php' => base_path('app/Http/Controllers/GdprController.php'),
         ], 'gdpr-consent');
     }
 
@@ -45,11 +45,11 @@ class GdprServiceProvider extends ServiceProvider
 
     protected function registerCommands()
     {
-	    if ($this->app->runningInConsole()) {
-		    $this->commands([
-			    AnonymizeInactiveUsers::class,
-		    ]);
-	    }
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                AnonymizeInactiveUsers::class,
+            ]);
+        }
     }
 
     /**

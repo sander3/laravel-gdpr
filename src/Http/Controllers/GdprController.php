@@ -58,38 +58,39 @@ class GdprController extends Controller
         return redirect()->to('/');
     }
 
-	/**
-	 * Saves the users denial of terms and the time of denial.
-	 *
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function termsDenied()
-	{
-		$user = Auth::user();
+    /**
+     * Saves the users denial of terms and the time of denial.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function termsDenied()
+    {
+        $user = Auth::user();
 
-		$user->update([
-			'accepted_gdpr' => false,
-		]);
+        $user->update([
+            'accepted_gdpr' => false,
+        ]);
 
-		return redirect()->to('/');
-	}
+        return redirect()->to('/');
+    }
 
-	/**
-	 * Anonymizes the user and sets the boolean.
-	 *
-	 * @param $id
-	 *
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function anonymize($id) {
-		$user = User::findOrFail($id);
+    /**
+     * Anonymizes the user and sets the boolean.
+     *
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function anonymize($id)
+    {
+        $user = User::findOrFail($id);
 
-		$user->anonymize();
+        $user->anonymize();
 
-		$user->update([
-			'isAnonymized' => true
-		]);
+        $user->update([
+            'isAnonymized' => true,
+        ]);
 
-		return redirect()->back();
-	}
+        return redirect()->back();
+    }
 }
