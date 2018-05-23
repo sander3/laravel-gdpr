@@ -2,6 +2,7 @@
 
 namespace Dialect\Gdpr;
 
+use Dialect\Gdpr\Commands\AnonymizeInactiveUsers;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,7 +16,7 @@ class GdprServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerRoutes();
-
+	    $this->registerCommands();
         // Load standard issue migrations
         $timestamp = date('Y_m_d_His');
         $this->publishes([
@@ -40,6 +41,15 @@ class GdprServiceProvider extends ServiceProvider
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/routes/web.php');
         });
+    }
+
+    protected function registerCommands()
+    {
+	    if ($this->app->runningInConsole()) {
+		    $this->commands([
+			    AnonymizeInactiveUsers::class,
+		    ]);
+	    }
     }
 
     /**
