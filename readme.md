@@ -19,7 +19,7 @@ Table of contents
    * [Configuration](#configuration)
       * [Portability](#portability)
       * [Anonymizability](#anonymizability)
-      * [Automatic anonymization](#Automatic Anonymization of inactive users)
+      * [Automatic anonymization](#automatic-anonymization-of-inactive-users)
       * [Configuring Anonymizable Data](#configuring-anonymizable-data)
       * [Recursive Anonymization](#recursive-anonymization)
       * [Configuring Portable Data](#configuring-portable-data)
@@ -114,7 +114,7 @@ To specify the time, edit the `ttl` setting in the published config. <br>
 To activate this feature:
 1. Add the command to the schedule function in `app/Console/Kernel.php` like so:
 
-    ```
+    ```php
         protected function schedule(Schedule $schedule)
         {
             $schedule->command('gdpr:anonymizeInactiveUsers')->daily();
@@ -122,7 +122,7 @@ To activate this feature:
     ```
 2.    Add the class to the `$commands` array in the same file like so:
 
-    ```
+    ```php
         protected $commands = [
             \App\Console\Commands\AnonymizeInactiveUsers::class,
         ];
@@ -131,8 +131,11 @@ To activate this feature:
 ### Configuring Anonymizable Data
 
 On the model, set `gdprAnonymizableFields` by adding the fields you want to anonymize on the model, 
-you can also use closures in the array, if no value for the field exists, default string from settings will be used.
-```
+you can also set up attribute-like functions on your model to supply replacement data. <br> 
+<b>If you have a unique-constraint on your model, you should use this.</b>
+ If no value is supplied, 
+a default string from settings will be used.
+```php
     /**
      * Using the default string from config.
      */
@@ -141,7 +144,7 @@ you can also use closures in the array, if no value for the field exists, defaul
         'email'
     ];
 ```
-```
+```php
     /**
      * Using replacement strings.
      */
@@ -150,21 +153,30 @@ you can also use closures in the array, if no value for the field exists, defaul
         'email' => 'anonymous@mail.com'
     ];
 ```
-```
-    /**
-     * Using closures.
-     */
-    protected $gdprAnonymizableFields = [
-        'name' => function($someString) {
-    	    return $someString;
-        },
-        'email' => function($someEmail) {
-            return $someEmail;
-        },
-    ];
-}
+```php
+    namespace App;
+    
+    use Dialect\Gdpr\Anonymizable;
+    
+    class User extends Model
+    {
+        use Anonymizable;
+        
+        protected $gdprAnonymizableFields = [
+            'email'
+        ];
+        
+        /**
+        * Using getAnonynomized{column} to return anonymizable data
+        */
+        public function getAnonynomizedEmail()
+        {
+            return random_bytes(10);
+        }
+    }
 
 ```
+
 
 ### Recursive Anonymization
 If the model has related models with fields that needs to be anonymized at the same time,

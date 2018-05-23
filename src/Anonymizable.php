@@ -2,6 +2,7 @@
 
 namespace Dialect\Gdpr;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Collection;
 
 trait Anonymizable
@@ -18,10 +19,14 @@ trait Anonymizable
         // Only anonymize the fields specified
         if ($this->gdprAnonymizableFields !== null) {
             foreach ($this->gdprAnonymizableFields as $key => $val) {
-                if (\is_int($key)) {
-                    $updateArray[$val] = $this->parseValue($val);
+                if (method_exists($this, 'getAnonymized'.Str::studly($key))) {
+                    $updateArray[$val] = $this->{'getAnonymized'.Str::studly($key)}($val);
                 } else {
-                    $updateArray[$key] = $this->parseValue($val);
+                    if (\is_int($key)) {
+                        $updateArray[$val] = $this->parseValue($val);
+                    } else {
+                        $updateArray[$key] = $this->parseValue($val);
+                    }
                 }
             }
         }
