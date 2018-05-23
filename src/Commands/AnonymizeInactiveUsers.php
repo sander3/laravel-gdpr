@@ -2,6 +2,8 @@
 
 namespace Dialect\Gdpr\Commands;
 
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class AnonymizeInactiveUsers extends Command
@@ -36,7 +38,7 @@ class AnonymizeInactiveUsers extends Command
      */
     public function handle()
     {
-        $anonymizableUsers = User::where('last_activity', '<=', carbon::now()->submonths(config('gdpr.settings.ttl')))->get();
+        $anonymizableUsers = User::where('last_activity', '!=', null)->where('last_activity', '<=', carbon::now()->subMonths(config('gdpr.settings.ttl')))->get();
 
         foreach ($anonymizableUsers as $user) {
             $user->anonymize();
