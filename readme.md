@@ -1,8 +1,9 @@
 # GDPR compliant data portability with ease
 
-[![Latest Stable Version](https://poser.pugx.org/soved/laravel-gdpr/v/stable?format=flat-square)](https://packagist.org/packages/soved/laravel-gdpr)
-[![Monthly Downloads](https://poser.pugx.org/soved/laravel-gdpr/d/monthly?format=flat-square)](https://packagist.org/packages/soved/laravel-gdpr)
-[![License](https://poser.pugx.org/soved/laravel-gdpr/license?format=flat-square)](https://packagist.org/packages/soved/laravel-gdpr)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sander3/laravel-gdpr/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sander3/laravel-gdpr/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/soved/laravel-gdpr/v/stable)](https://packagist.org/packages/soved/laravel-gdpr)
+[![Monthly Downloads](https://poser.pugx.org/soved/laravel-gdpr/d/monthly)](https://packagist.org/packages/soved/laravel-gdpr)
+[![License](https://poser.pugx.org/soved/laravel-gdpr/license)](https://packagist.org/packages/soved/laravel-gdpr)
 
 This package exposes an endpoint where authenticated users can download their data as required by GDPR article 20.
 
