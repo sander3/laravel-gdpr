@@ -5,7 +5,7 @@
 [![Monthly Downloads](https://poser.pugx.org/soved/laravel-gdpr/d/monthly)](https://packagist.org/packages/soved/laravel-gdpr)
 [![License](https://poser.pugx.org/soved/laravel-gdpr/license)](https://packagist.org/packages/soved/laravel-gdpr)
 
-This package exposes an endpoint where authenticated users can download their data as required by GDPR article 20.
+This package exposes an endpoint where authenticated users can download their data as required by GDPR article 20. This package also provides you with a trait to easily encrypt personal data and a strategy to clean up inactive users as required by GDPR article 5e.
 
 ## Requirements
 
@@ -197,7 +197,7 @@ class User extends Authenticatable
 
 ## Roadmap
 
-- Data retention
+- Tests
 
 ## Security Vulnerabilities
 
