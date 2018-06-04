@@ -19,7 +19,7 @@ class CleanupJob implements ShouldQueue
     public $users;
 
     /**
-     * @var
+     * @var \Soved\Laravel\Gdpr\Jobs\Cleanup\CleanupStrategy
      */
     public $strategy;
 
