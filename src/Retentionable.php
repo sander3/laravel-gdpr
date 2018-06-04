@@ -2,6 +2,8 @@
 
 namespace Soved\Laravel\Gdpr;
 
+use Carbon\Carbon;
+
 trait Retentionable
 {
     /**
@@ -9,7 +11,7 @@ trait Retentionable
      *
      * @return \Illuminate\Support\Carbon
      */
-    public function getLastActivityAttribute()
+    public function getLastActivityAttribute(): Carbon
     {
         return $this->updated_at;
     }
