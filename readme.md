@@ -1,11 +1,11 @@
-# GDPR compliant data portability with ease
+# GDPR compliance with ease
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sander3/laravel-gdpr/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sander3/laravel-gdpr/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/soved/laravel-gdpr/v/stable)](https://packagist.org/packages/soved/laravel-gdpr)
 [![Monthly Downloads](https://poser.pugx.org/soved/laravel-gdpr/d/monthly)](https://packagist.org/packages/soved/laravel-gdpr)
 [![License](https://poser.pugx.org/soved/laravel-gdpr/license)](https://packagist.org/packages/soved/laravel-gdpr)
 
-This package exposes an endpoint where authenticated users can download their data as required by GDPR article 20.
+This package exposes an endpoint where authenticated users can download their data as required by GDPR article 20. This package also provides you with a trait to easily [encrypt personal data](#encryption) and a strategy to [clean up inactive users](#data-retention) as required by GDPR article 5e.
 
 ## Requirements
 
@@ -195,9 +195,34 @@ class User extends Authenticatable
 
 ```
 
+### Data Retention
+
+You may clean up inactive users using the `gdpr:cleanup` command. Schedule the command to run every day at midnight, or run it yourself. In order for this to work, add the `Soved\Laravel\Gdpr\Retentionable` trait to the `App\User` model:
+
+```php
+<?php
+
+namespace App;
+
+use Soved\Laravel\Gdpr\Portable;
+use Soved\Laravel\Gdpr\Retentionable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use Retentionable, Portable, Notifiable;
+}
+
+```
+
+You may listen for the `Soved\Laravel\Gdpr\Events\GdprInactiveUser` event to notify your users about their inactivity, which will be dispatched two weeks before deletion. The `Soved\Laravel\Gdpr\Events\GdprInactiveUserDeleted` event will be dispatched upon deletion.
+
+Feel free to customize what happens to inactive users by creating your own cleanup strategy.
+
 ## Roadmap
 
-- Data retention
+- Tests
 
 ## Security Vulnerabilities
 

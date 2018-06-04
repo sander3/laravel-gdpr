@@ -4,6 +4,7 @@ namespace Soved\Laravel\Gdpr;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Soved\Laravel\Gdpr\Console\Commands\Cleanup;
 
 class GdprServiceProvider extends ServiceProvider
 {
@@ -15,6 +16,7 @@ class GdprServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerRoutes();
+        $this->registerCommands();
     }
 
     /**
@@ -31,6 +33,20 @@ class GdprServiceProvider extends ServiceProvider
         ], function () {
             $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         });
+    }
+
+    /**
+     * Register the GDPR commands.
+     *
+     * @return void
+     */
+    protected function registerCommands()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Cleanup::class,
+            ]);
+        }
     }
 
     /**

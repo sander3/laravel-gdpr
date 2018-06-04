@@ -29,4 +29,34 @@ return [
         'auth',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cleanup Strategy
+    |--------------------------------------------------------------------------
+    |
+    | This strategy will be used to clean up inactive users. Do not forget to
+    | mention these thresholds in your terms and conditions.
+    |
+    */
+
+    'cleanup' => [
+
+        'strategy' => 'Soved\Laravel\Gdpr\Jobs\Cleanup\Strategies\DefaultStrategy',
+
+        'defaultStrategy' => [
+
+            /*
+             * The number of months for which inactive users must be kept.
+             */
+            'keepInactiveUsersForMonths' => 6,
+
+            /*
+             * The number of days before deletion at which inactive users will be notified.
+             */
+            'notifyUsersDaysBeforeDeletion' => 14,
+
+        ],
+
+    ],
+
 ];
