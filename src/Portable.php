@@ -18,12 +18,12 @@ trait Portable
 
         // Make the given attributes visible
         if (isset($this->gdprVisible)) {
-            $this->makeVisible($this->gdprVisible);
+            $this->setVisible($this->gdprVisible);
         }
 
         // Make the given attributes hidden
         if (isset($this->gdprHidden)) {
-            $this->makeHidden($this->gdprHidden);
+            $this->setHidden($this->gdprHidden);
         }
 
         return $this->toPortableArray();
