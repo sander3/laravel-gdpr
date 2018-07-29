@@ -24,7 +24,7 @@ class GdprDownload extends FormRequest
     public function rules()
     {
         return [
-            'password' => 'required|string',
+            'password' => 'string',
         ];
     }
 }

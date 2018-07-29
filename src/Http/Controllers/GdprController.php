@@ -18,7 +18,7 @@ class GdprController extends Controller
      */
     public function download(GdprDownload $request)
     {
-        if (!$this->attemptLogin($request)) {
+        if (!$this->validateRequest($request)) {
             return $this->sendFailedLoginResponse();
         }
 
@@ -38,19 +38,34 @@ class GdprController extends Controller
     }
 
     /**
-     * Attempt to log the user into the application.
+     * Validate the request.
      *
      * @param  \Illuminate\Foundation\Http\FormRequest  $request
      * @return bool
      */
-    protected function attemptLogin(FormRequest $request)
+    protected function validateRequest(FormRequest $request)
+    {
+        if (config('gdpr.re-authenticate', true)) {
+            return $this->hasValidCredentials($request);
+        }
+
+        return Auth::check();
+    }
+
+    /**
+     * Validate a user's credentials.
+     *
+     * @param  \Illuminate\Foundation\Http\FormRequest  $request
+     * @return bool
+     */
+    protected function hasValidCredentials(FormRequest $request)
     {
         $credentials = [
             $request->user()->getAuthIdentifierName() => $request->user()->getAuthIdentifier(),
             'password'                                => $request->input('password'),
         ];
 
-        return Auth::attempt($credentials);
+        return Auth::validate($credentials);
     }
 
     /**
