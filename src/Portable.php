@@ -2,6 +2,8 @@
 
 namespace Soved\Laravel\Gdpr;
 
+use Soved\Laravel\Gdpr\Contracts\Portable as PortableContract;
+
 trait Portable
 {
     /**
@@ -13,7 +15,7 @@ trait Portable
     {
         // Eager load the given relations
         if (isset($this->gdprWith)) {
-            $this->loadMissing($this->gdprWith);
+            $this->loadRelations($this->gdprWith);
         }
 
         // Make the given attributes visible
@@ -27,6 +29,56 @@ trait Portable
         }
 
         return $this->toPortableArray();
+    }
+
+    /**
+     * Eager load the given relations.
+     *
+     * @param  array  $relations
+     * @return void
+     */
+    public function loadRelations(array $relations)
+    {
+        $portableRelations = $this->getPortableRelations($relations);
+
+        array_walk($portableRelations, [$this, 'loadPortableRelation']);
+
+        $this->load(array_diff($relations, $portableRelations));
+    }
+
+    /**
+     * Get all portable relations.
+     *
+     * @param  array  $relations
+     * @return array
+     */
+    private function getPortableRelations(array $relations)
+    {
+        $portableRelations = [];
+
+        foreach ($relations as $relation) {
+            if ($this->$relation()->getRelated() instanceof PortableContract) {
+                $portableRelations[] = $relation;
+            }
+        }
+
+        return $portableRelations;
+    }
+
+    /**
+     * Load and transform a portable relation.
+     *
+     * @param  string  $relation
+     * @return void
+     */
+    private function loadPortableRelation(string $relation)
+    {
+        $this->attributes[$relation] = $this
+            ->$relation()
+            ->get()
+            ->transform(function ($item) {
+                return $item->portable();
+            });
     }
 
     /**

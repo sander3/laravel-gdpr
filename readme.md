@@ -26,7 +26,7 @@ After installing the package, you should publish the configuration file:
 $ php artisan vendor:publish --tag=gdpr-config
 ```
 
-Finally, add the `Soved\Laravel\Gdpr\Portable` trait to the `App\User` model:
+Finally, add the `Soved\Laravel\Gdpr\Portable` trait to the `App\User` model and implement the `Soved\Laravel\Gdpr\Contracts\Portable` contract:
 
 ```php
 <?php
@@ -36,8 +36,9 @@ namespace App;
 use Soved\Laravel\Gdpr\Portable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Soved\Laravel\Gdpr\Contracts\Portable as PortableContract;
 
-class User extends Authenticatable
+class User extends Authenticatable implements PortableContract
 {
     use Portable, Notifiable;
 }
