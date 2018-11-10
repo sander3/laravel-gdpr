@@ -2,25 +2,25 @@
 
 namespace Soved\Laravel\Gdpr\Events;
 
-use App\User;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class GdprInactiveUser
 {
     use SerializesModels;
 
     /**
-     * @var \App\User
+     * @var \Illuminate\Contracts\Auth\Authenticatable
      */
     public $user;
 
     /**
      * Create a new event instance.
      *
-     * @param  \App\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(Authenticatable $user)
     {
         $this->user = $user;
     }
