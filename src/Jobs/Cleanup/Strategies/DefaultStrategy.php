@@ -2,9 +2,9 @@
 
 namespace Soved\Laravel\Gdpr\Jobs\Cleanup\Strategies;
 
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Soved\Laravel\Gdpr\Events\GdprInactiveUser;
 use Soved\Laravel\Gdpr\Jobs\Cleanup\CleanupStrategy;
 use Soved\Laravel\Gdpr\Events\GdprInactiveUserDeleted;
@@ -48,11 +48,11 @@ class DefaultStrategy extends CleanupStrategy
         Collection $users
     ) {
         $users->filter(
-            function (User $user) use ($inactivity, $notificationThreshold) {
+            function (Authenticatable $user) use ($inactivity, $notificationThreshold) {
                 return $user->last_activity->diffInDays($inactivity)
                     === $notificationThreshold;
             }
-        )->each(function (User $user) {
+        )->each(function (Authenticatable $user) {
             event(new GdprInactiveUser($user));
         });
     }
@@ -68,9 +68,9 @@ class DefaultStrategy extends CleanupStrategy
         Carbon $inactivity,
         Collection $users
     ) {
-        $users->filter(function (User $user) use ($inactivity) {
+        $users->filter(function (Authenticatable $user) use ($inactivity) {
             return $user->last_activity < $inactivity;
-        })->each(function (User $user) {
+        })->each(function (Authenticatable $user) {
             $user->delete();
 
             event(new GdprInactiveUserDeleted($user));
