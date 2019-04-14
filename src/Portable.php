@@ -73,12 +73,21 @@ trait Portable
      */
     private function loadPortableRelation(string $relation)
     {
-        $this->attributes[$relation] = $this
-            ->$relation()
+        $instance = $this->$relation();
+
+        $collection = $instance
             ->get()
             ->transform(function ($item) {
                 return $item->portable();
             });
+
+        $class = class_basename(get_class($instance));
+
+        if (in_array($class, ['HasOne', 'BelongsTo'])) {
+            $collection = $collection->first();
+        }
+
+        $this->attributes[$relation] = $collection;
     }
 
     /**
