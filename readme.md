@@ -10,7 +10,7 @@ This package exposes an endpoint where authenticated users can download their da
 ## Requirements
 
 - PHP >= 7.0.0
-- Laravel >= 5.5
+- Laravel >= 5.5 or 6.0
 
 ## Installation
 
