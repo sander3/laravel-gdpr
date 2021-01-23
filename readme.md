@@ -7,6 +7,8 @@
 
 This package exposes an endpoint where authenticated users can download their data as required by GDPR article 20. This package also provides you with a trait to easily [encrypt personal data](#encryption) and a strategy to [clean up inactive users](#data-retention) as required by GDPR article 5e.
 
+[Buy me a coffee ☕️](https://www.buymeacoffee.com/sander3)
+
 ## Requirements
 
 - PHP >= 7.0.0
