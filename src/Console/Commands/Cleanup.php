@@ -2,7 +2,6 @@
 
 namespace Soved\Laravel\Gdpr\Console\Commands;
 
-use App\User;
 use Illuminate\Console\Command;
 use Soved\Laravel\Gdpr\Jobs\Cleanup\CleanupJob;
 
@@ -41,7 +40,8 @@ class Cleanup extends Command
     {
         $config = config('gdpr');
 
-        $users = User::all();
+        $userModel = config('auth.providers.users.model');
+        $users = $userModel::all();
 
         $strategy = app($config['cleanup']['strategy']);
 
