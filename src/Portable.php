@@ -34,7 +34,6 @@ trait Portable
     /**
      * Eager load the given relations.
      *
-     * @param  array  $relations
      * @return void
      */
     public function loadRelations(array $relations)
@@ -49,7 +48,6 @@ trait Portable
     /**
      * Get all portable relations.
      *
-     * @param  array  $relations
      * @return array
      */
     private function getPortableRelations(array $relations)
@@ -68,7 +66,6 @@ trait Portable
     /**
      * Load and transform a portable relation.
      *
-     * @param  string  $relation
      * @return void
      */
     private function loadPortableRelation(string $relation)

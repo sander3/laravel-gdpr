@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Prefix URI
@@ -52,11 +51,9 @@ return [
     */
 
     'cleanup' => [
-
         'strategy' => 'Soved\Laravel\Gdpr\Jobs\Cleanup\Strategies\DefaultStrategy',
 
         'defaultStrategy' => [
-
             /*
              * The number of months for which inactive users must be kept.
              */
@@ -66,9 +63,6 @@ return [
              * The number of days before deletion at which inactive users will be notified.
              */
             'notifyUsersDaysBeforeDeletion' => 14,
-
         ],
-
     ],
-
 ];

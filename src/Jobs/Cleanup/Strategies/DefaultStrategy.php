@@ -14,7 +14,6 @@ class DefaultStrategy extends CleanupStrategy
     /**
      * Execute cleanup strategy.
      *
-     * @param  \Illuminate\Database\Eloquent\Collection  $users
      * @return void
      */
     public function execute(Collection $users)
@@ -37,9 +36,6 @@ class DefaultStrategy extends CleanupStrategy
     /**
      * Notify inactive users about their deletion.
      *
-     * @param  \Carbon\Carbon  $inactivity
-     * @param  int  $notificationThreshold
-     * @param  \Illuminate\Database\Eloquent\Collection  $users
      * @return void
      */
     private function notifyInactiveUsers(
@@ -60,8 +56,6 @@ class DefaultStrategy extends CleanupStrategy
     /**
      * Delete inactive users.
      *
-     * @param  \Carbon\Carbon  $inactivity
-     * @param  \Illuminate\Database\Eloquent\Collection  $users
      * @return void
      */
     private function deleteInactiveUsers(
