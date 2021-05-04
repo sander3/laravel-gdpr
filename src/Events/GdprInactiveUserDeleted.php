@@ -17,7 +17,8 @@ class GdprInactiveUserDeleted
     /**
      * Create a new event instance.
      *
-     * @param  \App\Authenticatable  $user
+     * @param \App\Authenticatable $user
+     *
      * @return void
      */
     public function __construct(Authenticatable $user)

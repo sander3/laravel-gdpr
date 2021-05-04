@@ -31,7 +31,7 @@ class GdprServiceProvider extends ServiceProvider
             'namespace'  => 'Soved\Laravel\Gdpr\Http\Controllers',
             'middleware' => config('gdpr.middleware'),
         ], function () {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });
     }
 
@@ -68,7 +68,8 @@ class GdprServiceProvider extends ServiceProvider
     protected function configure()
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/gdpr.php', 'gdpr'
+            __DIR__.'/../config/gdpr.php',
+            'gdpr'
         );
     }
 
@@ -81,7 +82,7 @@ class GdprServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/gdpr.php' => config_path('gdpr.php'),
+                __DIR__.'/../config/gdpr.php' => config_path('gdpr.php'),
             ], 'gdpr-config');
         }
     }

@@ -15,7 +15,6 @@ abstract class CleanupStrategy
     /**
      * Create a new cleanup strategy instance.
      *
-     * @param  \Illuminate\Contracts\Config\Repository  $config
      * @return void
      */
     public function __construct(Repository $config)
@@ -26,7 +25,6 @@ abstract class CleanupStrategy
     /**
      * Execute cleanup strategy.
      *
-     * @param  \Illuminate\Database\Eloquent\Collection  $users
      * @return void
      */
     abstract public function execute(Collection $users);

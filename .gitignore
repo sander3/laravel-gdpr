@@ -1,4 +1,5 @@
+.DS_Store
+.php-cs-fixer.cache
 /vendor
 composer.lock
-.DS_Store
 Thumbs.db

@@ -7,7 +7,8 @@ trait EncryptsAttributes
     /**
      * Get a plain attribute (not a relationship).
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function getAttributeValue($key)
@@ -15,7 +16,7 @@ trait EncryptsAttributes
         $value = parent::getAttributeValue($key);
 
         if (in_array($key, $this->encrypted) &&
-            !is_null($value)) {
+            ! is_null($value)) {
             return decrypt($value);
         }
 
@@ -25,8 +26,9 @@ trait EncryptsAttributes
     /**
      * Set a given attribute on the model.
      *
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return $this
      */
     public function setAttribute(
@@ -34,7 +36,7 @@ trait EncryptsAttributes
         $value
     ) {
         if (in_array($key, $this->encrypted) &&
-            !is_null($value)) {
+            ! is_null($value)) {
             $value = encrypt($value);
         }
 

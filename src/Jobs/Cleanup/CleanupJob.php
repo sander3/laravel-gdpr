@@ -11,7 +11,10 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CleanupJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var \Illuminate\Database\Eloquent\Collection
@@ -26,8 +29,8 @@ class CleanupJob implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Collection  $users
-     * @param  \Soved\Laravel\Gdpr\Jobs\Cleanup\CleanupStrategy  $strategy
+     * @param \Soved\Laravel\Gdpr\Jobs\Cleanup\CleanupStrategy $strategy
+     *
      * @return void
      */
     public function __construct(

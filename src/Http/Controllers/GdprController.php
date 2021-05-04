@@ -13,12 +13,11 @@ class GdprController extends Controller
     /**
      * Download the GDPR compliant data portability JSON file.
      *
-     * @param  \Soved\Laravel\Gdpr\Http\Requests\GdprDownload  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function download(GdprDownload $request)
     {
-        if (!$this->validateRequest($request)) {
+        if (! $this->validateRequest($request)) {
             return $this->sendFailedLoginResponse();
         }
 
@@ -40,7 +39,6 @@ class GdprController extends Controller
     /**
      * Validate the request.
      *
-     * @param  \Illuminate\Foundation\Http\FormRequest  $request
      * @return bool
      */
     protected function validateRequest(FormRequest $request)
@@ -55,7 +53,6 @@ class GdprController extends Controller
     /**
      * Validate a user's credentials.
      *
-     * @param  \Illuminate\Foundation\Http\FormRequest  $request
      * @return bool
      */
     protected function hasValidCredentials(FormRequest $request)
