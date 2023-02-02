@@ -1,11 +1,18 @@
 {
     "name": "soved/laravel-gdpr",
     "description": "GDPR compliance with ease",
-    "keywords": ["laravel", "gdpr", "data-portability", "soved", "data-retention", "encryption"],
+    "keywords": [
+        "laravel",
+        "gdpr",
+        "data-portability",
+        "soved",
+        "data-retention",
+        "encryption"
+    ],
     "type": "library",
     "require": {
         "php": ">=7.0.0",
-        "laravel/framework": "~5.5|~6.0|~7.0|~8.0|^9.0"
+        "laravel/framework": "~5.5|~6.0|~7.0|~8.0|^9.0|^10.0"
     },
     "autoload": {
         "psr-4": {
